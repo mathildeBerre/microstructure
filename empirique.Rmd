@@ -1,0 +1,21 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+# Régression
+
+``` {r echo=FALSE}
+#installer et télécharger le package xlsx
+install.packages("xlsx")
+install.packages("rJava")
+install.packages("xlsxjars")
+install.packages("readxl")
+```
+
+``` {r echo=FALSE}
+# Ouverture du fichier Excel et importation des données présentes sur la feuille 1
+library(xlsx)
+library(readxl)
+data <- read_excel("data_final_facteurs_fusionne_2.xlsx", 1)
+```
