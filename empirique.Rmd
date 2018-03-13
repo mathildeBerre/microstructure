@@ -13,9 +13,26 @@ install.packages("xlsxjars")
 install.packages("readxl")
 ```
 
-``` {r echo=FALSE}
+```{r}
 # Ouverture du fichier Excel et importation des données présentes sur la feuille 1
 library(xlsx)
 library(readxl)
 data <- read_excel("data_final_facteurs_fusionne_2.xlsx", 1)
 ```
+
+```{r}
+year = 1990
+month = 1
+dataTest =  data[data$month == month & data$year == year,]
+dataTest
+paramName = "beta_t1"
+cor(x = dataTest$return_rf[!is.na(dataTest$return_rf) & !is.na(dataTest$beta_t1)], y = dataTest$beta_t1[!is.na(dataTest$return_rf) & !is.na(dataTest$beta_t1)], method = "pearson")
+mean(dataTest$return_rf[!is.na(dataTest$return_rf) & !is.na(dataTest$beta_t1)])
+mean(dataTest$beta_t1[!is.na(dataTest$return_rf) & !is.na(dataTest$beta_t1)])
+```
+
+```{r}
+dataTest =  data[data$stock_number <= 20 & data$month == 1 & data,]
+dataTest
+```
+
