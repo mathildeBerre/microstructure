@@ -1,0 +1,25 @@
+---
+title: "Projet de microstructure"
+author: "Mathilde Berregard, Théophile Charmont, Mohammed Fellaji, Alexandra Herbadji, Ayoub Jarraya"
+date: "13/03/2018"
+output: html_document
+---
+
+## 
+
+``` {r echo=FALSE}
+#installer et télécharger le package xlsx
+install.packages("xlsx")
+install.packages("rJava")
+install.packages("xlsxjars")
+install.packages("readxl")
+```
+## importation des données
+
+``` {r echo=FALSE}
+# Ouverture du fichier Excel et importation des données présentes sur la feuille 1
+library(xlsx)
+library(readxl)
+data_final_facteurs_fusionne_2 <- read_excel("../data_final_facteurs_fusionne_2.xlsx", 1)
+
+```
