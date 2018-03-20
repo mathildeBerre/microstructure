@@ -21,5 +21,96 @@ install.packages("readxl")
 library(xlsx)
 library(readxl)
 data_final_facteurs_fusionne_2 <- read_excel("../data_final_facteurs_fusionne_2.xlsx", 1)
+```
+
+## Statistiques descriptives
+``` {r echo=FALSE}
+
+vecteurRenta <- data_final_facteurs_fusionne_2["return_rf"]
+summary(vecteurRenta)
+
+vecteurBeta <- data_final_facteurs_fusionne_2["beta"]
+summary(vecteurBeta)
+
+vecteurAIM <- data_final_facteurs_fusionne_2["AIM"]
+summary(vecteurAIM)
+
+vecteurlogMarket <- data_final_facteurs_fusionne_2["log_market_cap"]
+summary(vecteurlogMarket)
+
+vecteurLogBTM <- data_final_facteurs_fusionne_2["log_btm"]
+summary(vecteurLogBTM)
+  
+vecteurPIN <- data_final_facteurs_fusionne_2["pin"]
+summary(vecteurPIN)
+  
+vecteurFsrv <- data_final_facteurs_fusionne_2["fsrv"]
+summary(vecteurFsrv)
+  
+vecteurTurnover <- data_final_facteurs_fusionne_2["turnover"]
+summary(vecteurTurnover)
+  
+vecteurIlliqAmu <- data_final_facteurs_fusionne_2["illiq_amihud"]
+summary(vecteurIlliqAmu)
+  
+vecteurBetaSMB <- data_final_facteurs_fusionne_2["betaSMB"]
+summary(vecteurBetaSMB)
+  
+vecteurBetaHML <- data_final_facteurs_fusionne_2["betaHML"]
+summary(vecteurBetaHML)
+  
+vecteurBetaMOM <- data_final_facteurs_fusionne_2["betaMOM"]
+summary(vecteurBetaMOM)
+  
+vecteurMarketReturn <- data_final_facteurs_fusionne_2["Marketretrun"]
+summary(vecteurMarketReturn)
+  
+vecteurSMB <- data_final_facteurs_fusionne_2["SmallMinusBig"]
+summary(vecteurSMB)
+  
+vecteurHML <- data_final_facteurs_fusionne_2["HighMinusLow"]
+summary(vecteurBetaHML)
+  
+vecteurMOM <- data_final_facteurs_fusionne_2["MomentumFactor"]
+summary(vecteurMOM)
+
 
 ```
+## Etude de la corrélation de AIM
+
+``` {r echo=FALSE}
+'vecteurAIM <- data_final_facteurs_fusionne_2["AIM"]
+vecteurBeta <- data_final_facteurs_fusionne_2[""]
+cor()'
+
+```
+
+## Regression linéaire
+``` {r echo=FALSE}
+
+for 
+vecteurRenta <- data_final_facteurs_fusionne_2["return_rf"]
+
+vecteurBeta <- data_final_facteurs_fusionne_2["beta"]
+
+estimationRentaBeta <- lm(data_final_facteurs_fusionne_2$return_rf~data_final_facteurs_fusionne_2$beta)
+
+estimationRentaAIM <- lm(data_final_facteurs_fusionne_2$return_rf~data_final_facteurs_fusionne_2$AIM_t1)
+
+estimationRentaBetaAim <- lm(data_final_facteurs_fusionne_2$return_rf~data_final_facteurs_fusionne_2$beta_t1 + data_final_facteurs_fusionne_2$AIM_t1)
+
+estimationRentaPin <- lm(data_final_facteurs_fusionne_2$return_rf~data_final_facteurs_fusionne_2$pin_t1)
+
+estimationGlobale <- lm(data_final_facteurs_fusionne_2$return_rf~data_final_facteurs_fusionne_2$beta_t1 + data_final_facteurs_fusionne_2$AIM_t1 + data_final_facteurs_fusionne_2$log_market_cap_t1 + data_final_facteurs_fusionne_2$log_btm_t1 + data_final_facteurs_fusionne_2$pin_t1 + data_final_facteurs_fusionne_2$fsrv_t1 + data_final_facteurs_fusionne_2$turnover_t1 + data_final_facteurs_fusionne_2$illiq_amihud_t1 + data_final_facteurs_fusionne_2$betaSMB_t1 + data_final_facteurs_fusionne_2$betaHML_t1 + data_final_facteurs_fusionne_2$betaMOM_t1)
+
+
+
+
+summary(estimationRentaBeta)
+summary(estimationRentaAIM)
+summary(estimationRentaBetaAim)
+summary(estimationRentaPin)
+summary(estimationGlobale)
+```
+
+
