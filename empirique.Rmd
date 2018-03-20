@@ -21,6 +21,14 @@ data <- read_excel("data_final_facteurs_fusionne_2.xlsx", 1)
 ```
 
 ```{r}
+# Etude des correlations
+# 5,7,9,11,13,15,17,19,21,23,25
+dataReduce <- data[, c(4,6,8,10,12,14,16,18,20,22,24,26)]
+cor(dataReduce, use = "pairwise.complete.obs")
+```
+
+```{r}
+# Etude des paramètres au cours du temps
 x = c()
 y = c()
 year = 1965
