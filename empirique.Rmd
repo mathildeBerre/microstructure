@@ -1,0 +1,59 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+# Régression
+
+``` {r echo=FALSE}
+#installer et télécharger le package xlsx
+install.packages("xlsx")
+install.packages("rJava")
+install.packages("xlsxjars")
+install.packages("readxl")
+```
+
+```{r}
+# Ouverture du fichier Excel et importation des données présentes sur la feuille 1
+library(xlsx)
+library(readxl)
+data <- read_excel("data_final_facteurs_fusionne_2.xlsx", 1)
+```
+
+```{r}
+# Etude des correlations
+# 5,7,9,11,13,15,17,19,21,23,25
+dataReduce <- data[, c(4,6,8,10,12,14,16,18,20,22,24,26)]
+cor(dataReduce, use = "pairwise.complete.obs")
+```
+
+```{r}
+# Etude des paramètres au cours du temps
+x = c()
+y = c()
+year = 1965
+month = 1
+date = 0
+paramName = "AIM_t1"
+while (year < 2005) {
+  dataTest =  data[data$month == month & data$year == year,]
+  r <- cor(x = dataTest$return_rf[!is.na(dataTest$return_rf) & !is.na(dataTest$beta_t1)], y = dataTest$beta_t1[!is.na(dataTest$return_rf) & !is.na(dataTest$beta_t1)], method = "pearson")
+  mean(dataTest$return_rf[!is.na(dataTest$return_rf) & !is.na(dataTest$beta_t1)])
+  mean(dataTest$beta_t1[!is.na(dataTest$return_rf) & !is.na(dataTest$beta_t1)])
+  x <- c(x,date)
+  y <- c(y,mean(dataTest$beta_t1[!is.na(dataTest$return_rf) & !is.na(dataTest$beta_t1)]))
+  month = month + 1
+  date = date + 1
+  if (month == 13) {
+    month = 1
+    year = year + 1
+  }
+}
+plot(x,y, ylab = paramName, xlab = "Temps", type = "l")
+```
+
+```{r}
+dataTest =  data[data$stock_number <= 20 & data$month == 1 & data,]
+dataTest
+```
+
