@@ -21,14 +21,27 @@ data <- read_excel("data_final_facteurs_fusionne_2.xlsx", 1)
 ```
 
 ```{r}
-year = 1990
+x = c()
+y = c()
+year = 1965
 month = 1
-dataTest =  data[data$month == month & data$year == year,]
-dataTest
-paramName = "beta_t1"
-cor(x = dataTest$return_rf[!is.na(dataTest$return_rf) & !is.na(dataTest$beta_t1)], y = dataTest$beta_t1[!is.na(dataTest$return_rf) & !is.na(dataTest$beta_t1)], method = "pearson")
-mean(dataTest$return_rf[!is.na(dataTest$return_rf) & !is.na(dataTest$beta_t1)])
-mean(dataTest$beta_t1[!is.na(dataTest$return_rf) & !is.na(dataTest$beta_t1)])
+date = 0
+paramName = "AIM_t1"
+while (year < 2005) {
+  dataTest =  data[data$month == month & data$year == year,]
+  r <- cor(x = dataTest$return_rf[!is.na(dataTest$return_rf) & !is.na(dataTest$beta_t1)], y = dataTest$beta_t1[!is.na(dataTest$return_rf) & !is.na(dataTest$beta_t1)], method = "pearson")
+  mean(dataTest$return_rf[!is.na(dataTest$return_rf) & !is.na(dataTest$beta_t1)])
+  mean(dataTest$beta_t1[!is.na(dataTest$return_rf) & !is.na(dataTest$beta_t1)])
+  x <- c(x,date)
+  y <- c(y,mean(dataTest$beta_t1[!is.na(dataTest$return_rf) & !is.na(dataTest$beta_t1)]))
+  month = month + 1
+  date = date + 1
+  if (month == 13) {
+    month = 1
+    year = year + 1
+  }
+}
+plot(x,y, ylab = paramName, xlab = "Temps", type = "l")
 ```
 
 ```{r}
