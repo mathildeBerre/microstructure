@@ -11,21 +11,40 @@ install.packages("xlsx")
 install.packages("rJava")
 install.packages("xlsxjars")
 install.packages("readxl")
+install.packages("corrplot")
+install.packages("Hmisc")
 ```
 
 ```{r}
 # Ouverture du fichier Excel et importation des données présentes sur la feuille 1
 library(xlsx)
 library(readxl)
+library(corrplot)
+library(Hmisc)
 data <- read_excel("data_final_facteurs_fusionne_2.xlsx", 1)
 ```
 
 ```{r}
 # Etude des correlations
-# 5,7,9,11,13,15,17,19,21,23,25
-dataReduce <- data[, c(4,6,8,10,12,14,16,18,20,22,24,26)]
-cor(dataReduce, use = "pairwise.complete.obs")
+dataReduce <- data[, c(4,5,7,9,11,13,15,17,19,21,23,25)]
+corMat <- rcorr(as.matrix(dataReduce))
+corMat
 ```
+
+```{r}
+# Veification de la p-value
+cor.test(x = data$return_rf[!is.na(data$return_rf) & !is.na(data$beta)], y = data$beta[!is.na(data$return_rf) & !is.na(data$beta)])
+cor.test(x = data$return_rf[!is.na(data$return_rf) & !is.na(data$AIM)], y = data$AIM[!is.na(data$return_rf) & !is.na(data$AIM)])
+cor.test(x = data$return_rf[!is.na(data$return_rf) & !is.na(data$illiq_amihud)], y = data$illiq_amihud[!is.na(data$return_rf) & !is.na(data$illiq_amihud)])
+```
+
+
+```{r}
+# corrplot(corMat, type="upper", order="hclust", tl.col="black", tl.srt=45)
+# corrplot.mixed(corMat, lower.col = "black")
+# corrplot(corMat, p.mat = pMat$p, sig.level = 0.50)
+```
+
 
 ```{r}
 # Etude des paramètres au cours du temps
