@@ -75,4 +75,73 @@ plot(x,y, ylab = paramName, xlab = "Temps", type = "l")
 dataTest =  data[data$stock_number <= 20 & data$month == 1 & data,]
 dataTest
 ```
+# Gestion active
+
+```{r}
+getMax<-function(l, nb) {
+  result = c(1:nb)
+  for (i in l) {
+    
+  }
+}
+```
+
+```{r}
+x = c()
+y = c()
+year = 1965
+month = 1
+nbAsset = 10
+paramName = "AIM_t1"
+ptfPast = c()
+ptfCurr = c()
+dataSing = list()
+pnl = 0
+
+dataTest =  data[data$month == month & data$year == year,]
+attach(dataTest)
+dataTri = dataTest[order(AIM_t1),]
+dataTri
+detach(dataTest)
+count = 1
+for (i in dataTri) {
+  if (count < 11) {
+    dataSing$"stock_number" = dataTri$"stock_number"[count]
+    dataSing$"AIM_t1" = dataTri$"AIM_t1"[count]
+    dataSing$"return_rf" = dataTri$"return_rf"[count]
+    ptfPast <- c(ptfPast, dataSing)
+  }
+  count = count + 1
+}
+year = year + 1
+  
+while (year < 2005) {
+  dataTest =  data[data$month == month & data$year == year,]
+  attach(dataTest)
+  dataTri = dataTest[order(AIM_t1),]
+  dataTri
+  detach(dataTest)
+  count = 1
+  for (i in dataTri) {
+    if (count < 11) {
+      dataSing$"stock_number" = dataTri$"stock_number"[count]
+      dataSing$"AIM_t1" = dataTri$"AIM_t1"[count]
+      dataSing$"return_rf" = dataTri$"return_rf"[count]
+      ptfCurr <- c(ptfCurr, dataSing)
+    }
+    count = count + 1
+  }
+  
+  pnl = 0
+  for (i in ptf) {
+    pnl = pnl + data[data$year == year & data$month == month & data$stock_number == i$stock_number,1]$AIM_t1
+  }
+  
+  
+  x <- c(x,year)
+  y <- c(y,mean(dataTest$beta_t1[!is.na(dataTest$return_rf) & !is.na(dataTest$beta_t1)]))
+  year = year + 1
+}
+plot(x,y, ylab = paramName, xlab = "Temps", type = "l")
+```
 
