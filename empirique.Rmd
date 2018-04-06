@@ -166,5 +166,10 @@ sd = sd(y)
 lines(c(min(x),max(x)), c(mean, mean), type="o", pch=22, lty=2, col="blue")
 lines(c(min(x),max(x)), c(mean + sd, mean + sd), type="o", pch=22, lty=2, col="red")
 lines(c(min(x),max(x)), c(mean - sd, mean - sd), type="o", pch=22, lty=2, col="red")
+plot(density(y), , xlab="Rentabilité", ylab="Densité", main="Distribution des rentabilités du portefeuille")
+install.packages("e1071")
+library(e1071)
+skewness(y)
+kurtosis(RentJ90$Rt)
 ```
 
