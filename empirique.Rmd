@@ -99,17 +99,21 @@ dataSing = list()
 pnl = 0
 
 dataTest =  data[data$month == month & data$year == year,]
+dataTest2 =  data[data$month == month & data$year == year + 1,]
+stockNumber = dataTest$stock_number[!is.na(dataTest$return_rf) & !is.na(dataTest2$return_rf)]
 attach(dataTest)
 dataTri = dataTest[order(AIM_t1),]
 dataTri
 detach(dataTest)
 count = 1
+count2 = 1
 for (i in dataTri) {
-  if (count < 11) {
+  if (count2 <= nbAsset & dataTri$"stock_number"[count] %in% stockNumber) {
+    dataSing = list()
     dataSing$"stock_number" = dataTri$"stock_number"[count]
-    dataSing$"AIM_t1" = dataTri$"AIM_t1"[count]
     dataSing$"return_rf" = dataTri$"return_rf"[count]
     ptfPast <- c(ptfPast, dataSing)
+    count2 = count2 + 1
   }
   count = count + 1
 }
@@ -117,31 +121,55 @@ year = year + 1
   
 while (year < 2005) {
   dataTest =  data[data$month == month & data$year == year,]
+  dataTest2 =  data[data$month == month & data$year == year + 1,]
+  stockNumber = dataTest$stock_number[!is.na(dataTest$return_rf) & !is.na(dataTest2$return_rf)]
   attach(dataTest)
   dataTri = dataTest[order(AIM_t1),]
   dataTri
   detach(dataTest)
   count = 1
+  count2 = 1
   for (i in dataTri) {
-    if (count < 11) {
+    if (count2 <= nbAsset & dataTri$"stock_number"[count] %in% stockNumber) {
+      dataSing = list()
       dataSing$"stock_number" = dataTri$"stock_number"[count]
-      dataSing$"AIM_t1" = dataTri$"AIM_t1"[count]
       dataSing$"return_rf" = dataTri$"return_rf"[count]
       ptfCurr <- c(ptfCurr, dataSing)
+      count2 = count2 + 1
     }
     count = count + 1
   }
   
   pnl = 0
-  for (i in ptf) {
-    pnl = pnl + data[data$year == year & data$month == month & data$stock_number == i$stock_number,1]$AIM_t1
+  for (i in 1:length(ptfPast)) {
+    if (i %% 2 == 1 & length(data[data$year == year & data$month == month & data$stock_number == ptfPast[i],]$return_rf) != 0) {
+      pnl = pnl + data[data$year == year & data$month == month & data$stock_number == ptfPast[i],]$return_rf
+      print(data[data$year == year & data$month == month & data$stock_number == ptfPast[i],]$return_rf)
+    }
   }
-  
+  pnl = pnl/nbAsset
+  ptfPast = ptfCurr
+  ptfCurr = c()
   
   x <- c(x,year)
-  y <- c(y,mean(dataTest$beta_t1[!is.na(dataTest$return_rf) & !is.na(dataTest$beta_t1)]))
+  y <- c(y,pnl)
   year = year + 1
 }
-plot(x,y, ylab = paramName, xlab = "Temps", type = "l")
+plot(x,y, xlab = "Temps", ylab = "P&L", type = "l")
+```
+
+```{r}
+# Plot
+plot(x,y, xlab = "Temps", ylab = "P&L", type = "l")
+mean = mean(y)
+sd = sd(y)
+lines(c(min(x),max(x)), c(mean, mean), type="o", pch=22, lty=2, col="blue")
+lines(c(min(x),max(x)), c(mean + sd, mean + sd), type="o", pch=22, lty=2, col="red")
+lines(c(min(x),max(x)), c(mean - sd, mean - sd), type="o", pch=22, lty=2, col="red")
+plot(density(y), , xlab="Rentabilité", ylab="Densité", main="Distribution des rentabilités du portefeuille")
+install.packages("e1071")
+library(e1071)
+skewness(y)
+kurtosis(RentJ90$Rt)
 ```
 
