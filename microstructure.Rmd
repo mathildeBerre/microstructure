@@ -18,6 +18,9 @@ install.packages("readxl")
 
 ``` {r echo=FALSE}
 # Ouverture du fichier Excel et importation des données présentes sur la feuille 1
+#Sys.setenv(JAVA_HOME='C:\\Program Files (x86)\\Java\\jre1.8.0_161')
+Sys.setenv(JAVA_HOME='C:\\Program Files\\Java\\jre1.8.0_161')
+library(rJava)
 library(xlsx)
 library(readxl)
 data_final_facteurs_fusionne_2 <- read_excel("../data_final_facteurs_fusionne_2.xlsx", 1)
@@ -98,12 +101,41 @@ vectorRentaB <- c()
 
 vectorRentaPin= c()
 
-
 vectorRentaAIM = c()
-
 
 vectorRentaAIMBb = c()
 vectorRentaAIMBa = c()
+
+vectorRentaABPa = c()
+vectorRentaABPb = c()
+vectorRentaABPp = c()
+
+vectorAllb = c()
+vectorAlla = c()
+vectorAlllm = c()
+vectorAlllb = c()
+vectorAllp = c()
+vectorAllfsrv = c()
+vectorAllt = c()
+vectorAllilli = c()
+vectorAllSMB = c()
+vectorAllHML = c()
+vectorAllMOM = c()
+
+vectorAllb1 = c()
+vectorAlla1 = c()
+vectorAlllm1 = c()
+vectorAlllb1 = c()
+vectorAllfsrv1 = c()
+vectorAllt1 = c()
+vectorAllilli1 = c()
+vectorAllSMB1 = c()
+vectorAllHML1 = c()
+vectorAllMOM1 = c()
+
+vector3paramsa = c()
+vector3paramsb = c()
+vector3paramsf = c()
 
 
 
@@ -114,14 +146,7 @@ while (year < 2005) {
   {
   estimationRentaBeta <- lm(dataTest$return_rf[!is.na(dataTest$return_rf) & !is.na(dataTest$beta_t1)]~dataTest$beta_t1[!is.na(dataTest$return_rf) & !is.na(dataTest$beta_t1)])
   
-  vectorRentaB <- rbind(vectorRenta, coef(estimationRentaBeta)[2])
-  
-  #moyenneRentaBeta = moyenneRentaBeta + coef(estimationRentaBeta)[2]
-  
-  ##rint(summary(estimationRentaBeta)[[4]][2,4])
-  
-  #moyenneRentaBetaPvalue = moyenneRentaBetaPvalue + summary(estimationRentaBeta)[[4]][2,4]
- 
+  vectorRentaB <- rbind(vectorRentaB, coef(estimationRentaBeta)[2])
   
   }
   
@@ -147,11 +172,73 @@ while (year < 2005) {
   {
      estimationRentaAIMB <- lm(dataTest$return_rf[!is.na(dataTest$return_rf) & !is.na(dataTest$AIM_t1) & !is.na(dataTest$beta_t1)]~dataTest$AIM_t1[!is.na(dataTest$return_rf) & !is.na(dataTest$AIM_t1) & !is.na(dataTest$beta_t1)] + dataTest$beta_t1[!is.na(dataTest$return_rf) & !is.na(dataTest$AIM_t1) & !is.na(dataTest$beta_t1)] )
 
-  vectorRentaAIMBb  <- rbind(vectorRentaAIMBb, coef(estimationRentaAIMBb)[2])
-  vectorRentaAIMBa  <- rbind(vectorRentaAIMBa, coef(estimationRentaAIMBa )[3])
+  vectorRentaAIMBb  <- rbind(vectorRentaAIMBb, coef(estimationRentaAIMB)[2])
+  vectorRentaAIMBa  <- rbind(vectorRentaAIMBa, coef(estimationRentaAIMB )[3])
   
   
-  }
+   }
+  
+   if (length(dataTest$return_rf[!is.na(dataTest$return_rf) & (!is.na(dataTest$AIM_t1) & !is.na(dataTest$beta_t1) & !is.na(dataTest$pin_t1) )] ) !=0) 
+  {
+     estimationRentaABP <- lm(dataTest$return_rf[!is.na(dataTest$return_rf) & !is.na(dataTest$AIM_t1) & !is.na(dataTest$beta_t1) & !is.na(dataTest$pin_t1) ]~dataTest$AIM_t1[!is.na(dataTest$return_rf) & !is.na(dataTest$AIM_t1) & !is.na(dataTest$beta_t1)  & !is.na(dataTest$pin_t1)] + dataTest$beta_t1[!is.na(dataTest$return_rf) & !is.na(dataTest$AIM_t1) & !is.na(dataTest$beta_t1) & !is.na(dataTest$pin_t1)] + dataTest$pin_t1[!is.na(dataTest$return_rf) & !is.na(dataTest$AIM_t1) & !is.na(dataTest$beta_t1) & !is.na(dataTest$pin_t1)] )
+
+  vectorRentaABPb  <- rbind(vectorRentaABPb, coef(estimationRentaABP)[2])
+  vectorRentaABPa  <- rbind(vectorRentaABPa, coef(estimationRentaABP )[3])
+  vectorRentaABPp  <- rbind(vectorRentaABPp, coef(estimationRentaABP )[4])
+  
+   }
+  
+  condition = !is.na(dataTest$return_rf) & (!is.na(dataTest$AIM_t1) & !is.na(dataTest$beta_t1) & !is.na(dataTest$pin_t1) & !is.na(dataTest$log_market_cap_t1) & !is.na(dataTest$log_btm_t1) & !is.na(dataTest$fsrv_t1) & !is.na(dataTest$turnover_t1)  & !is.na(dataTest$illiq_amihud_t1)  & !is.na(dataTest$betaSMB_t1) & !is.na(dataTest$betaHML_t1) & !is.na(dataTest$betaMOM_t1) )
+  
+   if (length(dataTest$return_rf[condition] ) !=0) 
+  {
+     estimationAll <- lm(dataTest$return_rf[condition]~dataTest$beta_t1[condition] + dataTest$AIM_t1[condition] + dataTest$log_market_cap_t1[condition] +  dataTest$log_btm_t1[condition] +  dataTest$pin_t1[condition] + dataTest$fsrv_t1[condition] +  dataTest$turnover_t1[condition] +  dataTest$illiq_amihud_t1[condition] + dataTest$betaSMB_t1[condition] +  dataTest$betaHML_t1[condition] + dataTest$betaMOM_t1[condition])
+
+ 
+  
+vectorAllb = rbind(vectorAllb, coef(estimationAll)[2])
+vectorAlla = rbind(vectorAlla, coef(estimationAll)[3])
+vectorAlllm = rbind(vectorAlllm, coef(estimationAll)[4])
+vectorAlllb = rbind(vectorAlllb, coef(estimationAll)[5])
+vectorAllp = rbind(vectorAllp, coef(estimationAll)[6])
+vectorAllfsrv = rbind(vectorAllfsrv, coef(estimationAll)[7])
+vectorAllt = rbind(vectorAllt, coef(estimationAll)[8])
+vectorAllilli = rbind(vectorAllilli, coef(estimationAll)[9])
+vectorAllSMB = rbind(vectorAllSMB, coef(estimationAll)[10])
+vectorAllHML = rbind(vectorAllHML, coef(estimationAll)[11])
+vectorAllMOM = rbind(vectorAllMOM, coef(estimationAll)[12])
+  
+   }
+  
+    condition1 = !is.na(dataTest$return_rf) & (!is.na(dataTest$AIM_t1) & !is.na(dataTest$beta_t1)  & !is.na(dataTest$log_market_cap_t1) & !is.na(dataTest$log_btm_t1) & !is.na(dataTest$fsrv_t1) & !is.na(dataTest$turnover_t1)  & !is.na(dataTest$illiq_amihud_t1)  )
+  
+   if (length(dataTest$return_rf[condition1] ) !=0) 
+  {
+     estimationAll <- lm(dataTest$return_rf[condition1]~dataTest$beta_t1[condition1] + dataTest$AIM_t1[condition1] + dataTest$log_market_cap_t1[condition1] +  dataTest$log_btm_t1[condition1] + dataTest$fsrv_t1[condition1] +  dataTest$turnover_t1[condition1] +  dataTest$illiq_amihud_t1[condition1] )
+
+ 
+  
+vectorAllb1 = rbind(vectorAllb, coef(estimationAll)[2])
+vectorAlla1 = rbind(vectorAlla, coef(estimationAll)[3])
+vectorAlllm1 = rbind(vectorAlllm, coef(estimationAll)[4])
+vectorAlllb1 = rbind(vectorAlllb, coef(estimationAll)[5])
+vectorAllfsrv1 = rbind(vectorAllfsrv, coef(estimationAll)[6])
+vectorAllt1 = rbind(vectorAllt, coef(estimationAll)[7])
+vectorAllilli1 = rbind(vectorAllilli, coef(estimationAll)[8])
+  
+   }
+    
+condition3params = !is.na(dataTest$return_rf) & (!is.na(dataTest$AIM_t1) & !is.na(dataTest$beta_t1) & !is.na(dataTest$betaMOM_t1) )
+    
+if (length(dataTest$return_rf[condition3params] ) !=0) 
+  {
+     estimation3params <- lm(dataTest$return_rf[condition3params ]~dataTest$AIM_t1[condition3params] + dataTest$beta_t1[condition3params] + dataTest$betaMOM_t1[condition3params] )
+
+  vector3paramsa  <- rbind(vector3paramsa , coef(estimation3params)[2])
+  vector3paramsb   <- rbind(vector3paramsb , coef(estimation3params )[3])
+  vector3paramsf   <- rbind(vector3paramsf , coef(estimation3params )[4])
+  
+   }
   
 
 
@@ -174,7 +261,37 @@ t.test(vectorRentaAIM, conf.level = 0.95)
 
 t.test(vectorRentaPin,  conf.level = 0.95)
 
-t.test(vectorRentaAIMB,  conf.level = 0.95)
+t.test(vectorRentaAIMBb,  conf.level = 0.95)
+t.test(vectorRentaAIMBa,  conf.level = 0.95)
+
+t.test(vectorRentaABPb,  conf.level = 0.95)
+t.test(vectorRentaABPa,  conf.level = 0.95)
+t.test(vectorRentaABPp,  conf.level = 0.95)
+
+t.test(vectorAllb,  conf.level = 0.95)
+t.test(vectorAlla,  conf.level = 0.95)
+t.test(vectorAlllm,  conf.level = 0.95)
+t.test(vectorAlllb,  conf.level = 0.95)
+t.test(vectorAllp,  conf.level = 0.95)
+t.test(vectorAllfsrv,  conf.level = 0.95)
+t.test(vectorAllt,  conf.level = 0.95)
+t.test(vectorAllilli,  conf.level = 0.95)
+t.test(vectorAllSMB,  conf.level = 0.95)
+t.test(vectorAllHML,  conf.level = 0.95)
+t.test(vectorAllMOM,  conf.level = 0.95)
+
+t.test(vectorAllb1,  conf.level = 0.95)
+t.test(vectorAlla1,  conf.level = 0.95)
+t.test(vectorAlllm1,  conf.level = 0.95)
+t.test(vectorAlllb1,  conf.level = 0.95)
+t.test(vectorAllfsrv1,  conf.level = 0.95)
+t.test(vectorAllt1,  conf.level = 0.95)
+t.test(vectorAllilli1,  conf.level = 0.95)
+
+t.test(vector3paramsa,  conf.level = 0.95)
+t.test(vector3paramsb,  conf.level = 0.95)
+t.test(vector3paramsf,  conf.level = 0.95)
+
 
 
 
